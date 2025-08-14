@@ -53,7 +53,6 @@ function removeActive() {
     })
 }
 
-
 spans.forEach(span => {
     span.addEventListener('click', () => {
         removeActive();
@@ -64,16 +63,16 @@ spans.forEach(span => {
 let hours = 0;
 let minutes = 0;
 let seconds = 0;
-
+let isRunning = false; 
 
 function update() {
-    stopHours.textContent = hours;
-    stopMinutes.textContent = minutes;
-    stopSeconds.textContent = seconds;
+    stopHours.textContent = hours
+    stopMinutes.textContent = minutes
+    stopSeconds.textContent = seconds
 }
 
 function secundomer() {
-    if (!secundomer) return;
+    if (!isRunning) return; 
     seconds++;
     if (seconds === 60) {
         seconds = 0;
@@ -90,9 +89,11 @@ function secundomer() {
 stopBtn.addEventListener('click', () => {
     if (stopBtn.textContent === 'start') {
         stopBtn.textContent = 'stop';
+        isRunning = true;
         secundomer();
     } else if (stopBtn.textContent === 'stop') {
         stopBtn.textContent = 'clear';
+        isRunning = false;
     } else if (stopBtn.textContent === 'clear') {
         hours = 0;
         minutes = 0;
