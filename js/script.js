@@ -30,49 +30,50 @@ startSecundomer()
 
 
 const tabsItem = document.querySelectorAll('.tabsItem');
-const contentItem = document.querySelectorAll('.tabsContentItem')
-const stopHours = document.querySelector('.stopwatch__hours')
-const stopMinutes = document.querySelector('.stopwatch__minutes')
-const stopSeconds = document.querySelector('.stopwatch__seconds')
-const stopBtn = document.querySelector('.stopwatch__btn')
-const spans = document.querySelectorAll('.tabsLink__span')
+const contentItem = document.querySelectorAll('.tabsContentItem');
+const stopHours = document.querySelector('.stopwatch__hours');
+const stopMinutes = document.querySelector('.stopwatch__minutes');
+const stopSeconds = document.querySelector('.stopwatch__seconds');
+const stopBtn = document.querySelector('.stopwatch__btn');
+const spans = document.querySelectorAll('.tabsLink__span');
 
 
-tabsItem.forEach((tabs, i) => {
-    tabs.addEventListener('click', () => {
-        removeActive()
-        tabs.classList.add('active')
-        contentItem[i].classList.add('active')
-    })
-})
-
-function removeActive() {
-    tabsItem.forEach((tabs,i) => {
-        tabs.classList.remove('active')
-        contentItem[i].classList.remove('active')
-    })
-}
-
-spans.forEach(span => {
-    span.addEventListener('click', () => {
+tabsItem.forEach((tab, i) => {
+    tab.addEventListener('click', () => {
         removeActive();
+        tab.classList.add('active');
+        contentItem[i].classList.add('active');
     });
 });
 
+function removeActive() {
+    tabsItem.forEach((tab, i) => {
+        tab.classList.remove('active');
+        contentItem[i].classList.remove('active');
+    });
+}
+
+spans.forEach(span => {
+    span.addEventListener('click', removeActive);
+});
 
 let hours = 0;
 let minutes = 0;
 let seconds = 0;
-let isRunning = false; 
+let isRunning = false;
+
+function format(num) {
+    return num < 10 ? '0' + num : String(num);
+}
 
 function update() {
-    stopHours.textContent = hours
-    stopMinutes.textContent = minutes
-    stopSeconds.textContent = seconds
+    stopHours.textContent = format(hours);
+    stopMinutes.textContent = format(minutes);
+    stopSeconds.textContent = format(seconds);
 }
 
 function secundomer() {
-    if (!isRunning) return; 
+    if (!isRunning) return;
     seconds++;
     if (seconds === 60) {
         seconds = 0;
@@ -89,16 +90,24 @@ function secundomer() {
 stopBtn.addEventListener('click', () => {
     if (stopBtn.textContent === 'start') {
         stopBtn.textContent = 'stop';
+        spans.forEach(s => s.classList.add('active'));
         isRunning = true;
         secundomer();
     } else if (stopBtn.textContent === 'stop') {
         stopBtn.textContent = 'clear';
+        spans.forEach(s => {
+            s.classList.remove('active');
+            s.classList.add('active__clear');
+        });
         isRunning = false;
     } else if (stopBtn.textContent === 'clear') {
         hours = 0;
         minutes = 0;
         seconds = 0;
         update();
+        spans.forEach(s => {
+            s.classList.remove('active__clear');
+        });
         stopBtn.textContent = 'start';
     }
 });
